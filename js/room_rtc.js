@@ -140,7 +140,10 @@ let handleUserPublished = async(user, mediaType) => {
 // handle and delete the video frame when a user left
 let handleUserLeft = async(user) => {
     delete remoteUsers[user.uid]
-    document.getElementById(`user-container-${user.uid}`).remove()
+    let item =  document.getElementById(`user-container-${user.uid}`)
+    if (item) {
+        item.remove()
+    }
     // remvoe the frame when user leave
     if (userIdInDisplayFrame === `user-container-${user.uid}`) {
         displayFrame.style.display = null
@@ -229,9 +232,45 @@ let toggleScreen = async(e) => {
     }
 }
 
+//handle leave room button
+let leaveStream = async(e) => {
+    e.preventDefault()
+    // show join button when leave stream and hide stream__actions
+    document.getElementById('join-btn').style.display = 'block'
+    document.getElementsByClassName('stream__actions')[0].style.display = 'none'
+    // close all the local track
+    for (let i = 0; localTracks.length>i;i++) {
+        localTracks[i].stop()
+        localTracks[i].close()
+    }
+    //unpublish the audio and video
+    await client.unpublish([localTracks[0]],localTracks[1])
+
+    if (localScreenTracks) {
+        await client.unpublish([localScreenTracks])
+    }
+    //remove the video frame
+    document.getElementById(`user-container-${uid}`).remove()
+        //hide the toggled large frame
+    if(userIdInDisplayFrame === `user-container-${uid}`) {
+        displayName.style.display = null
+
+        for (let i = 0; videoFrames.length > i; i++) {
+            // smaller the other frame
+            if (videoFrames[i].id != userIdInDisplayFrame) {
+              videoFrames[i].style.height = '300px'
+              videoFrames[i].style.width = '300px'
+            }
+        }
+    }
+    // send leave message to channel
+    channel.sendMessage({text:JSON.stringify({'type':'user_left', 'uid':uid})})
+}
+
 document.getElementById('camera-btn').addEventListener('click',toggleCamera)
 document.getElementById('mic-btn').addEventListener('click',toggleMic)
 document.getElementById('screen-btn').addEventListener('click',toggleScreen)
 document.getElementById('join-btn').addEventListener('click',joinStrem)
+document.getElementById('leave-btn').addEventListener('click',leaveStream)
 joinRoomInit()
 

@@ -57,10 +57,28 @@ let getMembers = async() => {
 let handleChannelMessage = async(messageData, MemberId) => {
     console.log("A new message was received")
     let data = JSON.parse(messageData.text)
-    
+    // chat message
     if (data.type === 'chat') {
         addMessageToDom(data.displayName, data.message)
     }
+    // leave message
+    if (data.type === 'user_left') {
+        document.getElementById(`user-container-${data.uid}`).remove()
+
+        //hide the toggled large frame
+    if(userIdInDisplayFrame === `user-container-${uid}`) {
+        displayName.style.display = null
+
+        for (let i = 0; videoFrames.length > i; i++) {
+            // smaller the other frame
+            if (videoFrames[i].id != userIdInDisplayFrame) {
+              videoFrames[i].style.height = '300px'
+              videoFrames[i].style.width = '300px'
+            }
+        }
+    }
+    }
+
 }
 
 let sendMessage = async(e) => {
