@@ -70,17 +70,14 @@ let handleChannelMessage = async(messageData, MemberId) => {
             displayName.style.display = null
 
             for (let i = 0; videoFrames.length > i; i++) {
-                // smaller the other frame
-                if (videoFrames[i].id != userIdInDisplayFrame) {
                 videoFrames[i].style.height = '300px'
                 videoFrames[i].style.width = '300px'
             }
         }
     }
-    }
-
 }
 
+// When sending message, create a container showing the name of the author and the content of message
 let sendMessage = async(e) => {
     e.preventDefault()
     let message = e.target.message.value
@@ -88,7 +85,6 @@ let sendMessage = async(e) => {
     addMessageToDom(displayName, message)
     e.target.reset()
 }
-
 let addMessageToDom = (name, message) => {
     let messagesWrapper = document.getElementById('messages')
     let newMessage = `<div class="message__wrapper">
@@ -105,6 +101,7 @@ let addMessageToDom = (name, message) => {
     }
 }
 
+// bot message when user join or left the room
 let addBotMessageToDom = (botmessage) => {
     let messagesWrapper = document.getElementById('messages')
     let newMessage = `<div class="message__wrapper">

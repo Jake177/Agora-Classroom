@@ -79,6 +79,9 @@ let joinStrem = async () => {
     document.getElementById('streams__container').insertAdjacentHTML('beforeend', player)
     document.getElementById(`user-container-${uid}`).addEventListener('click', expandVideoFrame)
 
+    document.getElementById('mic-btn').classList.add('active')
+    document.getElementById('screen-btn').classList.remove('active')
+
 
     // Audio track is stored at index 0 and video track stored at index 1
     localTracks[1].play(`user-${uid}`)
@@ -95,8 +98,8 @@ let switchToCamera = async() => {
     await localTracks[0].setMuted(true)
     await localTracks[1].setMuted(true)
 
-    document.getElementById('mic-btn').classList.remove('active')
-    document.getElementById('screen-btn').classList.remove('active')
+    document.getElementById('mic-btn').classList.add('active')
+    document.getElementById('camera-btn').classList.add('active')
 
     localTracks[1].play(`user-${uid}`)
     await client.publish([localTracks[1]])
@@ -244,8 +247,8 @@ let leaveStream = async(e) => {
         localTracks[i].close()
     }
     //unpublish the audio and video
-    await client.unpublish([localTracks[0]],localTracks[1])
-
+    await client.unpublish([localTracks[0],localTracks[1]])
+    //if sharing screen unpublish screen track
     if (localScreenTracks) {
         await client.unpublish([localScreenTracks])
     }
@@ -256,11 +259,8 @@ let leaveStream = async(e) => {
         displayName.style.display = null
 
         for (let i = 0; videoFrames.length > i; i++) {
-            // smaller the other frame
-            if (videoFrames[i].id != userIdInDisplayFrame) {
-              videoFrames[i].style.height = '300px'
-              videoFrames[i].style.width = '300px'
-            }
+            videoFrames[i].style.height = '300px'
+            videoFrames[i].style.width = '300px'
         }
     }
     // send leave message to channel
