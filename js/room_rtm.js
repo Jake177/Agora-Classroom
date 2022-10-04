@@ -32,7 +32,7 @@ let updateMemberTotal = async (members) => {
 let handleMemberLeft = async(MemberId) => {
     removeMemberFromDom(MemberId)
 
-    let members = channel.getMembers()
+    let members = await channel.getMembers()
     updateMemberTotal(members)
 }
 
@@ -109,7 +109,6 @@ let addBotMessageToDom = (botmessage) => {
     let messagesWrapper = document.getElementById('messages')
     let newMessage = `<div class="message__wrapper">
                         <div class="message__body__bot">
-                            <strong class="message__author__bot">VirtualClassRoom Message</strong>
                                 <p class="message__text__bot">${botmessage}</p>
                         </div>
                     </div>`
