@@ -4,7 +4,7 @@ let handleMemberJoined = async (MemberId) => {
     console.log("A new member joined the room: ", MemberId)
     addMemberToDom(MemberId)
 
-    let members = channel.getMembers()
+    let members = await channel.getMembers()
     updateMemberTotal(members)
 
     addBotMessageToDom(`${name} joined the room`)
@@ -66,14 +66,14 @@ let handleChannelMessage = async(messageData, MemberId) => {
         document.getElementById(`user-container-${data.uid}`).remove()
 
         //hide the toggled large frame
-    if(userIdInDisplayFrame === `user-container-${uid}`) {
-        displayName.style.display = null
+        if(userIdInDisplayFrame === `user-container-${uid}`) {
+            displayName.style.display = null
 
-        for (let i = 0; videoFrames.length > i; i++) {
-            // smaller the other frame
-            if (videoFrames[i].id != userIdInDisplayFrame) {
-              videoFrames[i].style.height = '300px'
-              videoFrames[i].style.width = '300px'
+            for (let i = 0; videoFrames.length > i; i++) {
+                // smaller the other frame
+                if (videoFrames[i].id != userIdInDisplayFrame) {
+                videoFrames[i].style.height = '300px'
+                videoFrames[i].style.width = '300px'
             }
         }
     }
