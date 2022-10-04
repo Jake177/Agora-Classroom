@@ -124,9 +124,9 @@ let handleUserPublished = async(user, mediaType) => {
 
     // when large frame is toggled and new user comes in, set its display frame to small
     if (displayFrame.style.display) {
-        let videoFrames = document.getElementById(`user-container-${user.uid}`)
-        player.style.height = '100px'
-        player.style.width = '100px'
+        let videoFrame = document.getElementById(`user-container-${user.uid}`)
+        videoFrame.style.height = '100px'
+        videoFrame.style.width = '100px'
     }
 
     // checkfor the audio type and video type
